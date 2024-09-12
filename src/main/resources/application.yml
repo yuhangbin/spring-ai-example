@@ -1,0 +1,8 @@
+spring:
+  ai:
+    vectorstore:
+      redis:
+        uri: redis://:PQzkkZLOgOXXX@redis-19438.c330.asia-south1-1.gce.redns.redis-cloud.com:19438
+        index: faqs
+        prefix: "faq:"
+        initialize-schema: true
