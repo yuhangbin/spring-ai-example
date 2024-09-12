@@ -69,3 +69,4 @@ http localhost:8080/ai message=='Tell me a joke about a cow.'
 ### References
 - https://www.youtube.com/watch?v=7OY9fKVxAFQ
 - https://www.baeldung.com/spring-ai-redis-rag-app
+- https://docs.spring.io/spring-ai/reference/index.html
