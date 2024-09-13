@@ -1,6 +1,7 @@
 package com.cboy;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +10,10 @@ import java.util.Map;
 
 @RestController
 class AIController {
+
 	private final ChatClient chatClient;
+
+	@Autowired private ChatService chatService;
 
 	AIController(ChatClient chatClient) {
 		this.chatClient = chatClient;
@@ -22,5 +26,10 @@ class AIController {
 						.user(message)
 						.call()
 						.content());
+	}
+
+	@GetMapping("/hello")
+	String hello() {
+		return chatService.hello();
 	}
 }

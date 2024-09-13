@@ -1,8 +1,8 @@
 spring:
   ai:
-    openai:
-      chat:
-        base-url: localhost:11434
-        options:
-          model: llama3.1
-          temperature: 0.7
+#    openai:
+#      chat:
+#        base-url: localhost:11434
+#        options:
+#          model: llama3.1
+#          temperature: 0.7
