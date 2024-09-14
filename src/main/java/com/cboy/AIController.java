@@ -32,4 +32,9 @@ class AIController {
 	String hello() {
 		return chatService.hello();
 	}
+
+	@GetMapping("/weather")
+	String weather() {
+		return chatService.getWeatherWithFunctionCalling();
+	}
 }

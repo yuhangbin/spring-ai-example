@@ -7,10 +7,12 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.function.Function;
+
 @Configuration
 class Config {
 
-    private static final String DEFAULT_OLLAMA_MODEL = "llama3.1";
+    public static final String DEFAULT_OLLAMA_MODEL = "llama3.1";
 
     @Bean
     ChatClient chatClient() {
@@ -20,4 +22,8 @@ class Config {
         return ChatClient.builder(openAiChatModel).build();
     }
 
+    @Bean
+    public Function<MockWeatherService.Request, MockWeatherService.Response> getCurrentWeather() {
+        return new MockWeatherService();
+    }
 }
