@@ -36,7 +36,7 @@ public class MockWeatherService implements Function<MockWeatherService.Request, 
         F("imperial");
 
         /**
-         * Human readable unit name.
+         * Human-readable unit name.
          */
         public final String unitName;
 
