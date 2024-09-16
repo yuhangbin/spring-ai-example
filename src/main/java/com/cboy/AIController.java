@@ -37,4 +37,9 @@ class AIController {
 	String weather() {
 		return chatService.getWeatherWithFunctionCalling();
 	}
+
+	@GetMapping("/role")
+	String role() {
+		return chatService.role();
+	}
 }

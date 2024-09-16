@@ -16,10 +16,14 @@ class Config {
 
     @Bean
     ChatClient chatClient() {
+        return ChatClient.builder(openAiChatModel()).build();
+    }
+
+    @Bean
+    OpenAiChatModel openAiChatModel() {
         OpenAiApi openAiApi = new OpenAiApi("http://localhost:11434", "");
-        OpenAiChatModel openAiChatModel = new OpenAiChatModel(openAiApi,
+        return new OpenAiChatModel(openAiApi,
                 OpenAiChatOptions.builder().withModel(DEFAULT_OLLAMA_MODEL).build());
-        return ChatClient.builder(openAiChatModel).build();
     }
 
     @Bean
