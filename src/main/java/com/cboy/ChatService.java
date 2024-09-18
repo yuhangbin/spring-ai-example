@@ -1,9 +1,11 @@
 package com.cboy;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.model.function.FunctionCallbackWrapper;
@@ -15,10 +17,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.cboy.Config.DEFAULT_OLLAMA_MODEL;
 
@@ -72,5 +76,23 @@ public class ChatService {
         Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
         ChatResponse response = openAiChatModel.call(prompt);
         return response.toString();
+    }
+
+    public String streamRole() {
+        UserMessage userMessage = new UserMessage(
+                "Tell me about 3 famous pirates from the Golden Age of Piracy and what they did."
+        );
+        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemResource);
+        Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", "Bob", "voice", "pirate"));
+        Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
+        Flux<ChatResponse> flux = openAiChatModel.stream(prompt);
+        List<ChatResponse> responses = flux.collectList().block();
+        assert responses != null;
+        return responses.stream()
+                .map(ChatResponse::getResults)
+                .flatMap(List::stream)
+                .map(Generation::getOutput)
+                .map(AssistantMessage::getContent)
+                .collect(Collectors.joining());
     }
 }
