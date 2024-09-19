@@ -7,7 +7,9 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.ai.converter.ListOutputConverter;
 import org.springframework.ai.model.function.FunctionCallbackWrapper;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -15,6 +17,7 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -96,5 +99,21 @@ public class ChatService {
                 .collect(Collectors.joining());
     }
 
+    public String listOutputConverter() {
+        DefaultConversionService conversionService = new DefaultConversionService();
+        ListOutputConverter outputConverter = new ListOutputConverter(conversionService);
 
+        String format = outputConverter.getFormat();
+        String template = """
+                List five {subject}
+                {format}
+                """;
+        PromptTemplate promptTemplate = new PromptTemplate(template,
+                Map.of("subject", "ice cream flavors", "format", format));
+        Prompt prompt = new Prompt(promptTemplate.createMessage());
+        Generation generation = this.openAiChatModel.call(prompt).getResult();
+        List<String> list = outputConverter.convert(generation.getOutput().getContent());
+        assert list != null;
+        return list.toString();
+    }
 }

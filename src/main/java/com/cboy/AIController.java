@@ -47,4 +47,9 @@ class AIController {
 	String streamRole() {
 		return chatService.streamRole();
 	}
+
+	@GetMapping("/listOutputConverter")
+	String listOutputConverter() {
+		return chatService.listOutputConverter();
+	}
 }
