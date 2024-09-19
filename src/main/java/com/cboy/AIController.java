@@ -42,4 +42,9 @@ class AIController {
 	String role() {
 		return chatService.role();
 	}
+
+	@GetMapping("/streamRole")
+	String streamRole() {
+		return chatService.streamRole();
+	}
 }

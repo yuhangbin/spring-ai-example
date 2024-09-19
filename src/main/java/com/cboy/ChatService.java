@@ -95,4 +95,6 @@ public class ChatService {
                 .map(AssistantMessage::getContent)
                 .collect(Collectors.joining());
     }
+
+
 }
