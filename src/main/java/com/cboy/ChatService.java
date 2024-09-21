@@ -10,6 +10,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.converter.ListOutputConverter;
+import org.springframework.ai.converter.MapOutputConverter;
 import org.springframework.ai.model.function.FunctionCallbackWrapper;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -115,5 +116,22 @@ public class ChatService {
         List<String> list = outputConverter.convert(generation.getOutput().getContent());
         assert list != null;
         return list.toString();
+    }
+
+    public String mapOutputConverter() {
+        MapOutputConverter outputConverter = new MapOutputConverter();
+
+        String format = outputConverter.getFormat();
+        String template = """
+				Provide me a List of {subject}
+				{format}
+				""";
+        PromptTemplate promptTemplate = new PromptTemplate(template,
+                Map.of("subject", "numbers from 1 to 9 under they key name 'numbers'", "format", format));
+        Prompt prompt = new Prompt(promptTemplate.createMessage());
+        Generation generation = openAiChatModel.call(prompt).getResult();
+        Map<String,Object> result = outputConverter.convert(generation.getOutput().getContent());
+        assert result != null;
+        return result.toString();
     }
 }

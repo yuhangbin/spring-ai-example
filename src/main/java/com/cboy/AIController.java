@@ -52,4 +52,9 @@ class AIController {
 	String listOutputConverter() {
 		return chatService.listOutputConverter();
 	}
+
+	@GetMapping("/mapOutputConverter")
+	String mapOutputConverter() {
+		return chatService.mapOutputConverter();
+	}
 }
