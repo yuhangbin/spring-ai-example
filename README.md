@@ -66,8 +66,17 @@ http localhost:8080/ai message=='Tell me a joke about a cow.'
 ```
 ## TODO
 - Prompt
+  - System Message
+  - User Message
+  - Prompt Template
+- Embeddings
+  - spring abstract design
+    - ModelOptions,ModelRequest,Model,ModelResponse(ResponseMetadata),ModelResult(ResultMetadata)
 - Structure Response
-- Though of chain
+  - list
+  - map
+  - bean
+- Chain of thought
 - Roles
 - Function calling
 - RAG
