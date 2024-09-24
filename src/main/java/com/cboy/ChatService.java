@@ -4,6 +4,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -12,9 +13,7 @@ import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.converter.ListOutputConverter;
 import org.springframework.ai.converter.MapOutputConverter;
 import org.springframework.ai.model.function.FunctionCallbackWrapper;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.cboy.Config.DEFAULT_OLLAMA_MODEL;
-
 @Service
 public class ChatService {
 
@@ -37,7 +34,7 @@ public class ChatService {
     private ChatClient chatClient;
 
     @Autowired
-    private OpenAiChatModel openAiChatModel;
+    private ChatModel chatModel;
 
 
     @Value("classpath:/prompts/system-message.st")
@@ -59,7 +56,7 @@ public class ChatService {
 
         List<Message> messages = new ArrayList<>(List.of(userMessage));
 
-        var promptOptions = OpenAiChatOptions.builder()
+        var promptOptions = OllamaOptions.builder()
                 .withFunctionCallbacks(List.of(FunctionCallbackWrapper.builder(new MockWeatherService())
                         .withName("getCurrentWeather")
                         .withDescription("Get the weather in location")
@@ -67,7 +64,7 @@ public class ChatService {
                         .build()
                 ))
                 .build();
-        ChatResponse response = openAiChatModel.call(new Prompt(messages, promptOptions));
+        ChatResponse response = chatModel.call(new Prompt(messages, promptOptions));
         return response.toString();
     }
 
@@ -78,7 +75,7 @@ public class ChatService {
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemResource);
         Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", "Bob", "voice", "pirate"));
         Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
-        ChatResponse response = openAiChatModel.call(prompt);
+        ChatResponse response = chatModel.call(prompt);
         return response.toString();
     }
 
@@ -89,7 +86,7 @@ public class ChatService {
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemResource);
         Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", "Bob", "voice", "pirate"));
         Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
-        Flux<ChatResponse> flux = openAiChatModel.stream(prompt);
+        Flux<ChatResponse> flux = chatModel.stream(prompt);
         List<ChatResponse> responses = flux.collectList().block();
         assert responses != null;
         return responses.stream()
@@ -112,7 +109,7 @@ public class ChatService {
         PromptTemplate promptTemplate = new PromptTemplate(template,
                 Map.of("subject", "ice cream flavors", "format", format));
         Prompt prompt = new Prompt(promptTemplate.createMessage());
-        Generation generation = this.openAiChatModel.call(prompt).getResult();
+        Generation generation = this.chatModel.call(prompt).getResult();
         List<String> list = outputConverter.convert(generation.getOutput().getContent());
         assert list != null;
         return list.toString();
@@ -129,7 +126,7 @@ public class ChatService {
         PromptTemplate promptTemplate = new PromptTemplate(template,
                 Map.of("subject", "numbers from 1 to 9 under they key name 'numbers'", "format", format));
         Prompt prompt = new Prompt(promptTemplate.createMessage());
-        Generation generation = openAiChatModel.call(prompt).getResult();
+        Generation generation = chatModel.call(prompt).getResult();
         Map<String,Object> result = outputConverter.convert(generation.getOutput().getContent());
         assert result != null;
         return result.toString();
