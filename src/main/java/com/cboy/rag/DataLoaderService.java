@@ -1,4 +1,4 @@
-package com.cboy;
+package com.cboy.rag;
 
 //import org.springframework.ai.reader.ExtractedTextFormatter;
 //import org.springframework.ai.reader.pdf.PagePdfDocumentReader;

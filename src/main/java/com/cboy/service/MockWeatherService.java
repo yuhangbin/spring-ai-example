@@ -1,4 +1,4 @@
-package com.cboy;
+package com.cboy.service;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import java.util.function.Function;
 
+/**
+ * For function calling
+ */
 public class MockWeatherService implements Function<MockWeatherService.Request, MockWeatherService.Response> {
 
     /**

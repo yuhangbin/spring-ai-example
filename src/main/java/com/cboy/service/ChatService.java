@@ -1,5 +1,6 @@
-package com.cboy;
+package com.cboy.service;
 
+import com.cboy.pojo.ActorFilms;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;

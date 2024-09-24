@@ -1,5 +1,6 @@
-package com.cboy;
+package com.cboy.controller;
 
+import com.cboy.service.ChatService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-class AIController {
+class ChatModelController {
 
 	private final ChatClient chatClient;
 
 	@Autowired private ChatService chatService;
 
-	AIController(ChatClient chatClient) {
+	ChatModelController(ChatClient chatClient) {
 		this.chatClient = chatClient;
 	}
 	@GetMapping("/ai")

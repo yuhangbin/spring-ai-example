@@ -1,4 +1,4 @@
-package com.cboy;
+package com.cboy.pojo;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.cboy;
+package com.cboy.rag;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
