@@ -10,7 +10,7 @@ spring:
       pgvector:
         index-type: HNSW
         distance-type: COSINE_DISTANCE
-        dimensions: 1536
+        dimensions: 384
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
