@@ -39,7 +39,8 @@ class ModelConfig {
         OllamaApi ollamaApi = new OllamaApi();
         return new OllamaEmbeddingModel(ollamaApi,
                 OllamaOptions.builder()
-                        .withModel(OllamaModel.LLAMA3_1.id())
+//                        .withModel(OllamaModel.LLAMA3_1.id())
+                        .withModel("all-minilm")
                         .build());
     }
 
