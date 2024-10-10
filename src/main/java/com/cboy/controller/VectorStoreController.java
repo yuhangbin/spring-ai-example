@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/vector")
 @RestController
@@ -18,8 +19,8 @@ public class VectorStoreController {
     VectorStoreService vectorStoreService;
 
     @GetMapping("/topK/{k}")
-    public List<Document> getTopK(@PathVariable("k") int k) {
+    public List<String> getTopK(@PathVariable("k") int k) {
         vectorStoreService.add();
-        return vectorStoreService.topK(k);
+        return vectorStoreService.topK(k).stream().map(Document::getContent).collect(Collectors.toList());
     }
 }
